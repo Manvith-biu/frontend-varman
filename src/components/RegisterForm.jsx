@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 const RegisterForm = ({ username }) => {
@@ -9,6 +10,7 @@ const RegisterForm = ({ username }) => {
   const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
+  const navigate = useNavigate();
 
   const handleRegister = async (e) => {
     e.preventDefault();
@@ -23,6 +25,11 @@ const RegisterForm = ({ username }) => {
       });
       setMessage(response.data.message);
       setError("");
+
+      // Redirect to FolderView after successful registration
+      if (response.status === 201) {
+        navigate(`/${username}/folders`);
+      }
     } catch (err) {
       setError(err.response?.data?.message || "Registration failed.");
     }
